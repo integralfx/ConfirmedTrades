@@ -8,5 +8,5 @@ class TradeListView(ListView):
     context_object_name = 'trades'
     template_name = 'trades/home.html'
     paginate_by = 20
-
+    ordering = ['user1']
     
