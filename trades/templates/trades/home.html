@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>First User</th>
+                <th>Second User</th>
+                <th>Comment ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trade in trades %}
+                <tr>
+                    <td>{{ trade.user1 }}</td>
+                    <td>{{ trade.user2 }}</td>
+                    <td>{{ trade.comment_id }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'includes/pagination.html' %}
+{% endblock %}
