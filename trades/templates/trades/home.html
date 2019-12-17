@@ -12,9 +12,15 @@
         <tbody>
             {% for trade in trades %}
                 <tr>
-                    <td>{{ trade.user1 }}</td>
-                    <td>{{ trade.user2 }}</td>
-                    <td>{{ trade.comment_id }}</td>
+                    <td>
+                        <a href="https://reddit.com/user/{{ trade.user1 }}">{{ trade.user1 }}</a>
+                    </td>
+                    <td>
+                    <a href="https://reddit.com/user/{{ trade.user2 }}">{{ trade.user2 }}</a>
+                    </td>
+                    <td>
+                        <a href="{{ trade.get_comment_url }}">{{ trade.comment_id }}</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
