@@ -13,5 +13,5 @@ class TradeListView(ListView):
 
 def trades(req, redditor_id):
     redditor = get_object_or_404(Redditor, id=redditor_id)
-    trades = Trade.objects.filter(user1=redditor)
+    trades = Trade.objects.filter(user1=redditor).order_by('user2')
     return render(req, 'trades/trades.html', { 'redditor': redditor, 'trades': trades })
