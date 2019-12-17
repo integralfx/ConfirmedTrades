@@ -2,9 +2,17 @@
 
 {% block content %}
     <h2>Trades for {{ redditor }}</h2>
-    <ol>
+    
+    <div class="row">
         {% for trade in trades %}
-            <li>{{ trade.user2 }} - {{ trade.comment_id }}</li>
+            <div class="col-md-4 h-100 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ trade.user2 }}</h5>
+                        <p class="card-text">{{ trade.comment_id }}</p>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ol>
+    </div>
 {% endblock %}
