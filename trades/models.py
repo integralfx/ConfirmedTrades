@@ -20,6 +20,7 @@ class Trade(models.Model):
     user1 = models.ForeignKey(Redditor, related_name='trades1', on_delete=models.CASCADE)
     user2 = models.ForeignKey(Redditor, related_name='trades2', on_delete=models.CASCADE)
     comment_id = models.CharField(max_length=7)
+    comment_url = models.CharField(max_length=200)
 
     def get_comment_url(self):
         comment = reddit.comment(self.comment_id)
