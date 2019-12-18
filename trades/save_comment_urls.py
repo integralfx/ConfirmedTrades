@@ -4,7 +4,7 @@ import os.path
 
 def save_comment_urls(start_id, count=1000):
     trades = Trade.objects.filter(id__gte=start_id)[:count]
-    filename = f'url_{start_id}-{start_id + count - 1}.txt'
+    filename = f'trades/comment_urls/url_{start_id}-{start_id + count - 1}.txt'
 
     if os.path.isfile(filename):
         print(f'{filename} already exists')
