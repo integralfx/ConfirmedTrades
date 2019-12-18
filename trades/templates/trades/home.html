@@ -19,8 +19,7 @@
                     <a href="{% url 'trades' trade.user2 %}">{{ trade.user2 }}</a>
                     </td>
                     <td>
-                        <!--a href="{{ trade.get_comment_url }}">{{ trade.comment_id }}</a-->
-                        {{ trade.comment_id }}
+                        <a href="{{ trade.comment_url }}">{{ trade.comment_id }}</a>
                     </td>
                 </tr>
             {% endfor %}

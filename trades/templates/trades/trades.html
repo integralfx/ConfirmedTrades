@@ -9,7 +9,7 @@
             <div class="card-text">
                 <ul>
                     <li><a href="https://reddit.com/user/{{ redditor }}">Reddit Profile</a></li>
-                    <li>{{ trades.count }} trades confirmed</li>
+                    <li>{{ trades.count }} trade{{ trades.count|pluralize }} confirmed</li>
                 <ul>
             </div>
         </div>
@@ -19,14 +19,14 @@
         <thead>
             <tr>
                 <td>User</td>
-                <td>Comment ID</td>
+                <td>Confirmation</td>
             </tr>
         </thead>
         <tbody>
             {% for trade in trades %}
                 <tr>
                     <td><a href="{% url 'trades' trade.user2 %}">{{ trade.user2 }}</a></td>
-                    <td>{{ trade.comment_id }}</td>
+                    <td><a href="{{ trade.comment_url }}">{{ trade.comment_id }}</a></td>
                 </tr>
             {% endfor %}
         </tbody>
