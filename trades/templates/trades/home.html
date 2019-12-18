@@ -13,13 +13,14 @@
             {% for trade in trades %}
                 <tr>
                     <td>
-                        <a href="https://reddit.com/user/{{ trade.user1 }}">{{ trade.user1 }}</a>
+                        <a href="{% url 'trades' trade.user1 %}">{{ trade.user1 }}</a>
                     </td>
                     <td>
-                    <a href="https://reddit.com/user/{{ trade.user2 }}">{{ trade.user2 }}</a>
+                    <a href="{% url 'trades' trade.user2 %}">{{ trade.user2 }}</a>
                     </td>
                     <td>
-                        <a href="{{ trade.get_comment_url }}">{{ trade.comment_id }}</a>
+                        <!--a href="{{ trade.get_comment_url }}">{{ trade.comment_id }}</a-->
+                        {{ trade.comment_id }}
                     </td>
                 </tr>
             {% endfor %}
