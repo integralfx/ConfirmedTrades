@@ -3,16 +3,32 @@
 {% block content %}
     <h2>Trades for {{ redditor }}</h2>
     
-    <div class="row">
-        {% for trade in trades %}
-            <div class="col-md-4 h-100 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ trade.user2 }}</h5>
-                        <p class="card-text">{{ trade.comment_id }}</p>
-                    </div>
-                </div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ redditor }} Info</h5>
+            <div class="card-text">
+                <ul>
+                    <li><a href="https://reddit.com/user/{{ redditor }}">Reddit Profile</a></li>
+                    <li>{{ trades.count }} trades confirmed</li>
+                <ul>
             </div>
-        {% endfor %}
+        </div>
     </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <td>User</td>
+                <td>Comment ID</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trade in trades %}
+                <tr>
+                    <td><a href="{% url 'trades' trade.user2 %}">{{ trade.user2 }}</a></td>
+                    <td>{{ trade.comment_id }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
