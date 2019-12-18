@@ -12,7 +12,7 @@ def import_trades():
                 for url in f.readlines():
                     tokens = url.split(':')
                     id = int(tokens[0])
-                    comment_url = tokens[1][1:]
+                    comment_url = tokens[1][1:] + ':' + tokens[2]
 
                     trade = Trade.objects.get(id=id)
                     trade.comment_url = comment_url
