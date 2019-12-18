@@ -9,5 +9,5 @@ with tqdm(total=total, unit='trades') as pbar:
     for trade in trades:
         trade.comment_url = trade.get_comment_url()
         trade.save()
-        pbar.set_postfix(id=trade.id, comment_id=trade.comment_id)
+        pbar.set_postfix(comment_id=trade.comment_id)
         pbar.update()
