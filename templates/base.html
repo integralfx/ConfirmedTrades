@@ -14,7 +14,8 @@
             <div class="container">
                 <a class="navbar-brand" href="{% url 'home' %}">Confirmed Trades</a>
                 <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="get">
-                    <input class="form-control" name="q" type="text" placeholder="Search user">
+                    <input class="form-control" name="q" type="text" placeholder="Search user" 
+                           value="{% if 'q' in request.GET %}{{ request.GET.q }}{% endif %}">
                 </form>
             </div>
         </nav>
