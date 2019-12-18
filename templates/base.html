@@ -13,6 +13,9 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'home' %}">Confirmed Trades</a>
+                <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="get">
+                    <input class="form-control" name="q" type="text" placeholder="Search user">
+                </form>
             </div>
         </nav>
 
