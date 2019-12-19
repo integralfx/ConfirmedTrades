@@ -102,14 +102,20 @@ def import_confirmed_trades():
         if not Redditor.objects.filter(username=user).exists():
             Redditor.objects.create(username=user)
 
-    for user, comment_ids in tqdm(trades.items(), desc='Adding new Trades', unit='users'):
-        user1 = Redditor.objects.get(username=user)
-        for cid in comment_ids:
-            username2 = find_user2(trades, user, cid)
-            if username2:
-                user2 = Redditor.objects.get(username=username2)
-                if not Trade.objects.filter(user1=user1, user2=user2, comment_id=cid).exists():
-                    url = ct.get_url_from_comment_id(cid)
-                    Trade.objects.create(user1=user1, user2=user2, comment_id=cid, comment_url=url)
+    total = sum(list(map(lambda comment_ids: len(comment_ids), trades.values())))
+
+    with tqdm(desc='Adding new Trades', total=total, unit='trades') as pbar:
+        for user, comment_ids in trades.items():
+            user1 = Redditor.objects.get(username=user)
+            for cid in comment_ids:
+                pbar.set_postfix(comment_id=cid)
+                username2 = find_user2(trades, user, cid)
+                if username2:
+                    user2 = Redditor.objects.get(username=username2)
+                    if not Trade.objects.filter(user1=user1, user2=user2, comment_id=cid).exists():
+                        url = ct.get_url_from_comment_id(cid)
+                        Trade.objects.create(user1=user1, user2=user2, comment_id=cid, comment_url=url)
+
+                pbar.update()
 
 
