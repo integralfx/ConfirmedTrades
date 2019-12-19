@@ -9,6 +9,23 @@ class ConfirmedTrades:
         self.trades = {}
         self.urls = []
 
+
+    # Checks if mentioned_user has replied 'confirmed'
+    def has_mentioned_user_confirmed(self, prev_level_id, comment, mentioned_user):
+        if comment.author is None:
+            return False
+
+        user = comment.author.name.lower()
+        if user == mentioned_user and 'confirmed' in comment.body.lower():
+            return True
+
+        for reply in comment.replies:
+            if self.has_mentioned_user_confirmed(comment.id, reply, mentioned_user):
+                return True
+
+        return False
+
+
     # returns {<username>:[<comment_ids>]} where:
     #   username is the Reddit username
     #   comment_ids are a list of the parent_ids of a confirmed trade
@@ -32,31 +49,35 @@ class ConfirmedTrades:
             mentioned_user = match.group().lower()[2:]
 
             for second_level_comment in top_level_comment.replies:
-                if second_level_comment.author is None:
-                    continue
+                if self.has_mentioned_user_confirmed(top_level_comment.id, second_level_comment, mentioned_user):
+                    print(f'Trade between {top_level_user} and {mentioned_user} confirmed')
 
-                second_level_user = second_level_comment.author.name.lower()
+                # if second_level_comment.author is None:
+                #     continue
 
-                if second_level_user != mentioned_user:
-                    pbar.update()
-                    continue
+                # second_level_user = second_level_comment.author.name.lower()
 
-                if 'confirmed' in second_level_comment.body.lower():
-                    if top_level_user not in confirmed_trades:
-                        confirmed_trades[top_level_user] = [top_level_comment.id]
-                    else:
-                        if top_level_comment.id not in confirmed_trades[top_level_user]:
-                            confirmed_trades[top_level_user].append(top_level_comment.id)
+                # if second_level_user != mentioned_user:
+                #     continue
 
-                    if second_level_user not in confirmed_trades:
-                        confirmed_trades[second_level_user] = [top_level_comment.id]
-                    else:
-                        if top_level_comment.id not in confirmed_trades[second_level_user]:
-                            confirmed_trades[second_level_user].append(top_level_comment.id)
+                # if 'confirmed' in second_level_comment.body.lower():
+                #     if top_level_user not in confirmed_trades:
+                #         confirmed_trades[top_level_user] = [top_level_comment.id]
+                #     else:
+                #         if top_level_comment.id not in confirmed_trades[top_level_user]:
+                #             confirmed_trades[top_level_user].append(top_level_comment.id)
 
-                    break
+                #     if second_level_user not in confirmed_trades:
+                #         confirmed_trades[second_level_user] = [top_level_comment.id]
+                #     else:
+                #         if top_level_comment.id not in confirmed_trades[second_level_user]:
+                #             confirmed_trades[second_level_user].append(top_level_comment.id)
+
+                #     break
 
         return confirmed_trades
+        
+
 
     # returns a list of the urls of the monthly confirmed trade threads
     def get_submission_urls(self):

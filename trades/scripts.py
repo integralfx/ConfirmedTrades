@@ -119,3 +119,6 @@ def import_confirmed_trades():
                 pbar.update()
 
 
+def test():
+    comment = reddit.comment(url='https://www.reddit.com/r/hardwareswap/comments/e4cqzg/december_confirmed_trade_thread/f9audl9/')
+    print(comment.replies)
