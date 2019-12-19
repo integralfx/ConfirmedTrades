@@ -17,7 +17,7 @@ class TradeListView(ListView):
     def get_queryset(self):
         if 'q' in self.request.GET:
             q = self.request.GET['q']
-            return Trade.objects.filter(user1__username__icontains=q)
+            return Trade.objects.filter(user1__username__icontains=q).order_by('user2')
         else:
             return super().get_queryset()
 
