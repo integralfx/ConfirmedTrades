@@ -104,3 +104,5 @@ ENV/
 *.sqlite3
 
 url_*.txt
+confirmed_trades/
+confirmed_trades_urls.txt
