@@ -50,6 +50,7 @@ class ConfirmedTrades:
                 if comment_id not in confirmed_trades[user]:
                     confirmed_trades[user].append(comment_id)
 
+
         for comment in submission.comments:
             if comment.author is None:
                 continue

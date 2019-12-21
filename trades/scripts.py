@@ -119,7 +119,23 @@ def import_confirmed_trades():
                 pbar.update()
 
 
-def test():
-    trades = ct.get_trades_from_url('https://www.reddit.com/r/hardwareswap/comments/e4cqzg/december_confirmed_trade_thread/')
-    for user in trades:
-        print(f'{user}: {trades[user]}')
+def update_confirmed_trades(url):
+    trades = ct.get_trades_from_url(url)
+
+    with tqdm(desc='Adding new users', total=len(trades), unit='users') as pbar:
+        for user in trades:
+            pbar.set_postfix(user=user)
+            if not Redditor.objects.filter(username=user).exists():
+                Redditor.objects.create(username=user)
+            pbar.update()
+
+    total = sum(list(map(lambda ids: len(ids), trades.values())))
+    with tqdm(desc='Adding new trades', total=total, unit='trades') as pbar:
+        for username1, comment_ids in trades.items():
+            user1 = Redditor.objects.get(username=username1)
+            for cid in comment_ids:
+                username2 = find_user2(trades, username1, cid)
+                user2 = Redditor.objects.get(username=username2)
+                url = ct.get_url_from_comment_id(cid)
+                Trade.objects.create(user1=user1, user2=user2, comment_id=cid, comment_url=url)
+                pbar.update()
