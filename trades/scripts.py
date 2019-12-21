@@ -120,5 +120,6 @@ def import_confirmed_trades():
 
 
 def test():
-    comment = reddit.comment(url='https://www.reddit.com/r/hardwareswap/comments/e4cqzg/december_confirmed_trade_thread/f9audl9/')
-    print(comment.replies)
+    trades = ct.get_trades_from_url('https://www.reddit.com/r/hardwareswap/comments/e4cqzg/december_confirmed_trade_thread/')
+    for user in trades:
+        print(f'{user}: {trades[user]}')
