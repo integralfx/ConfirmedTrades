@@ -12,7 +12,7 @@ class ConfirmedTrades:
 
     # Checks if mentioned_user replied 'confirmed' and returns the parent comment id.
     # TODO: Account for confirmations of other users. e.g. A traded with B, B confirmed, B traded with C, C confirmed.
-    def get_mentioned_user_confirmed_id(self, parent_comment_id, comment, mentioned_user=None):
+    def get_mentioned_user_confirmed_id(self, parent_comment_id, comment, mentioned_user):
         if comment.author is None:
             return None
 
@@ -36,6 +36,7 @@ class ConfirmedTrades:
     # returns {<username>:[<comment_ids>]} where:
     #   username is the Reddit username
     #   comment_ids are a list of the parent_ids of a confirmed trade
+    # Assumes that each trade is in a different top level comment.
     def get_trades_from_url(self, url):
         submission = self.reddit.submission(url=url)
         submission.comment_sort = 'new'
@@ -49,30 +50,24 @@ class ConfirmedTrades:
                 if comment_id not in confirmed_trades[user]:
                     confirmed_trades[user].append(comment_id)
 
-        for top_level_comment in submission.comments:
-            if top_level_comment.author is None:
+        for comment in submission.comments:
+            if comment.author is None:
                 continue
 
             # usernames are not case sensitive
-            top_level_user = top_level_comment.author.name.lower()
+            top_level_user = comment.author.name.lower()
 
             # find the mentioned user
-            match = re.search('u/\w+', top_level_comment.body)
+            match = re.search('u/[A-Za-z0-9_-]+', comment.body)
             if match is None:
                 continue
             mentioned_user = match.group().lower()[2:]
 
-            for second_level_comment in top_level_comment.replies:
-                confirmation_id = self.get_mentioned_user_confirmed_id(top_level_comment.id, second_level_comment, mentioned_user)
+            for reply in comment.replies:
+                confirmation_id = self.get_mentioned_user_confirmed_id(comment.id, reply, mentioned_user)
                 if confirmation_id:
                     add_confirmed_trade(top_level_user, confirmation_id)
-                    add_confirmed_trade(mentioned_user)
-
-                    if mentioned_user not in confirmed_trades:
-                        confirmed_trades[mentioned_user] = [confirmation_id]
-                    else:
-                        if confirmation_id not in confirmed_trades[mentioned_user]:
-                            confirmed_trades[mentioned_user].append(confirmation_id)
+                    add_confirmed_trade(mentioned_user, confirmation_id)
 
         return confirmed_trades
         
