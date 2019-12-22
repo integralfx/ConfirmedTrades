@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 
+{% load query_transform %}
+
 {% block content %}
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th>First User</th>
-                <th>Second User</th>
-                <th>Confirmation</th>
+                <th style="width: 80%">
+                    <a href="?{% sort_query request 'sort-user' True %}">User</a>
+                </th>
+                <th style="width: 20%">
+                    <a href="?{% sort_query request 'sort-trades' True %}">Trades</a>
+                </th>
             </tr>
         </thead>
         <tbody>
-            {% for trade in trades %}
+            {% for redditor in redditors %}
                 <tr>
                     <td>
-                        <a href="{% url 'trades' trade.user1 %}">{{ trade.user1 }}</a>
+                        <a href="{% url 'trades' redditor.username %}">{{ redditor.username }}</a>
                     </td>
                     <td>
-                    <a href="{% url 'trades' trade.user2 %}">{{ trade.user2 }}</a>
-                    </td>
-                    <td>
-                        <a href="{{ trade.comment_url }}">{{ trade.comment_id }}</a>
+                        {{ redditor.trades1.count }}
                     </td>
                 </tr>
             {% endfor %}
