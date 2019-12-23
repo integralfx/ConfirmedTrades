@@ -31,3 +31,8 @@ def sort_query(request, param, delete_others):
         
     return urlencode(params)
 
+
+@register.simple_tag
+def get_param(request, param):
+    params = request.GET.copy()
+    return params[param] if param in params else None

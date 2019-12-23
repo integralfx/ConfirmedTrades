@@ -2,15 +2,39 @@
 
 {% load query_transform %}
 
+{% load static %}
+
 {% block content %}
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
+            <!-- TODO: Add icons -->
                 <th style="width: 80%">
-                    <a href="?{% sort_query request 'sort-user' True %}">User</a>
+                    <a href="?{% sort_query request 'sort-user' True %}">
+                        User
+                        {% get_param request 'sort-user' as param %}
+                        {% get_param request 'sort-trades' as sort_trades %}
+                        {% if not sort_trades %}
+                            {% if param == 'asc' or not param %}
+                                <img src="{% static 'img/chevron-up.svg' %}">
+                            {% else %}
+                                <img src="{% static 'img/chevron-down.svg' %}">
+                            {% endif %}
+                        {% endif %}
+                    </a>
                 </th>
                 <th style="width: 20%">
-                    <a href="?{% sort_query request 'sort-trades' True %}">Trades</a>
+                    <a href="?{% sort_query request 'sort-trades' True %}">
+                        Trades
+                        {% get_param request 'sort-trades' as param %}
+                        {% if param %}
+                            {% if param == 'asc' %}
+                                <img src="{% static 'img/chevron-up.svg' %}">
+                            {% else %}
+                                <img src="{% static 'img/chevron-down.svg' %}">
+                            {% endif %}
+                        {% endif %}
+                    </a>
                 </th>
             </tr>
         </thead>
