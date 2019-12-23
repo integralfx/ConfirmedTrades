@@ -20,6 +20,7 @@
             <tr>
                 <th>User</th>
                 <th>Confirmation</th>
+                <th>Confirmation Date Time</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
                 <tr>
                     <td><a href="{% url 'trades' trade.user2 %}">{{ trade.user2 }}</a></td>
                     <td><a href="{{ trade.comment_url }}">{{ trade.comment_id }}</a></td>
+                    <td>{{ trade.confirmation_datetime }}</td>
                 </tr>
             {% endfor %}
         </tbody>

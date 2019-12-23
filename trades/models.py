@@ -12,4 +12,4 @@ class Trade(models.Model):
     user2 = models.ForeignKey(Redditor, related_name='trades2', on_delete=models.CASCADE)
     comment_id = models.CharField(max_length=7)
     comment_url = models.CharField(max_length=200)
-
+    confirmation_datetime = models.DateTimeField(default='1970-01-01 00:00:00')
