@@ -21,8 +21,7 @@ class RedditorListView(ListView):
         if 'sort-user' in self.request.GET:
             sort_order = self.request.GET['sort-user']
             qs = qs.order_by(f'{"-" if sort_order == "desc" else ""}username')
-
-        if 'sort-trades' in self.request.GET:
+        elif 'sort-trades' in self.request.GET:
             sort_order = self.request.GET['sort-trades']
             qs = (qs.annotate(num_trades=Count('trades1'))
                     .order_by(f'{"-" if sort_order == "desc" else ""}num_trades'))
@@ -32,6 +31,14 @@ class RedditorListView(ListView):
 
 def trades(req, username):
     redditor = get_object_or_404(Redditor, username=username)
-    trades = Trade.objects.filter(user1=redditor).order_by('user2')
+    trades = Trade.objects.filter(user1=redditor)
+
+    if 'sort-user' in req.GET:
+        sort_order = req.GET['sort-user']
+        trades = trades.order_by(f'{"-" if sort_order == "desc" else ""}user2__username')
+    elif 'sort-date' in req.GET:
+        sort_order = req.GET['sort-date']
+        trades = trades.order_by(f'{"-" if sort_order == "desc" else ""}confirmation_datetime')
+
     return render(req, 'trades/trades.html', { 'redditor': redditor, 'trades': trades })
 

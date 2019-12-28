@@ -9,30 +9,17 @@
         <thead>
             <tr>
                 <th style="width: 80%">
-                    <a href="?{% sort_query request 'sort-user' True %}">
+                    <a href="?{% sort_query request 'sort-user' %}">
                         User
-                        {% get_param request 'sort-user' as param %}
-                        {% get_param request 'sort-trades' as sort_trades %}
-                        {% if not sort_trades %}
-                            {% if param == 'asc' or not param %}
-                                <img src="{% static 'img/chevron-up.svg' %}">
-                            {% else %}
-                                <img src="{% static 'img/chevron-down.svg' %}">
-                            {% endif %}
-                        {% endif %}
+                        {% get_param request 'sort-user' as sort_param %}
+                        {% include 'includes/sort_icon.html' %}
                     </a>
                 </th>
                 <th style="width: 20%">
-                    <a href="?{% sort_query request 'sort-trades' True %}">
+                    <a href="?{% sort_query request 'sort-trades' %}">
                         Trades
-                        {% get_param request 'sort-trades' as param %}
-                        {% if param %}
-                            {% if param == 'asc' %}
-                                <img src="{% static 'img/chevron-up.svg' %}">
-                            {% else %}
-                                <img src="{% static 'img/chevron-down.svg' %}">
-                            {% endif %}
-                        {% endif %}
+                        {% get_param request 'sort-trades' as sort_param %}
+                        {% include 'includes/sort_icon.html' %}
                     </a>
                 </th>
             </tr>

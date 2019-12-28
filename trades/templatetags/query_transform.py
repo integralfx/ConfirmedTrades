@@ -13,7 +13,7 @@ def query_transform(request, **kwargs):
 
 
 @register.simple_tag
-def sort_query(request, param, delete_others):
+def sort_query(request, param, delete_others=True):
     params = request.GET.copy()
 
     if param in params:
@@ -23,8 +23,9 @@ def sort_query(request, param, delete_others):
         # it in this case, should sort the users in descending order.
         # However, changing the sorted column should sort in ascending order. For example, say the get query is 
         # 'sort-trades=asc'. Clicking on the user column would result in 'sort-user=asc'.
-        sort_desc = param == 'sort-user' and 'sort-user' not in params and 'sort-trades' not in params
-        params[param] = 'desc' if sort_desc else 'asc'
+        #sort_desc = param == 'sort-user' and 'sort-user' not in params and 'sort-trades' not in params
+        #params[param] = 'desc' if sort_desc else 'asc'
+        params[param] = 'asc'
 
     if delete_others:
         params = { k: v for k, v in params.items() if not k.startswith('sort') or k == param }

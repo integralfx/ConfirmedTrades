@@ -1,0 +1,11 @@
+{% load query_transform %}
+
+{% load static %}
+
+{% if sort_param %}
+    {% if sort_param == 'asc' %}
+        <img src="{% static 'img/chevron-up.svg' %}">
+    {% else %}
+        <img src="{% static 'img/chevron-down.svg' %}">
+    {% endif %}
+{% endif %}
