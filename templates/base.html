@@ -16,8 +16,9 @@
 
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'update' %}">Update</a>
+                        {% url 'update' as update_url %}
+                        <li class="nav-item {% if request.path == update_url %}active{% endif %}">
+                            <a class="nav-link" href="{{ update_url }}">Update</a>
                         </li>
                     </ul>
                 </div>
