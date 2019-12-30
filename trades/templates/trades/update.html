@@ -2,19 +2,13 @@
 
 {% block content %}
     <div class="row justify-content-center">
-        <div class="card col-10">
+        <div class="card col-lg-10">
             <div class="card-body">
                 <h3 class="card-title">Update trades</h3>
 
-                <form method="post">
+                <form action="{% url 'update' %}" method="post">
                     {% csrf_token %}
-
-                    <div class="form-group">
-                        <label for="inputUrl">r/hardwareswap Monthly Trades URL</label>
-                        <input class="form-control" id="inputUrl" name="inputUrl" type="url" required
-                            pattern="^https:\/\/www\.reddit\.com\/r\/hardwareswap\/comments\/[a-z0-9]{6}\/.+$"
-                            placeholder="https://www.reddit.com/r/hardwareswap/comments/e4cqzg/december_confirmed_trade_thread/">
-                    </div>
+                    {% include 'includes/form.html' %}
                     <button type="submit" class="btn btn-success">Update</button>
                 </form>
             </div>

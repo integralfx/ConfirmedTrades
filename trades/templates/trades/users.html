@@ -28,7 +28,7 @@
             {% for redditor in redditors %}
                 <tr>
                     <td>
-                        <a href="{% url 'trades' redditor.username %}">{{ redditor.username }}</a>
+                        <a href="{% url 'user-trades' redditor.username %}">{{ redditor.username }}</a>
                     </td>
                     <td>
                         {{ redditor.trades1.count }}

@@ -1,13 +1,14 @@
 from django.views.generic import ListView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count
 
+from .forms import UpdateTradesForm
 from .models import Redditor, Trade
 
 class RedditorListView(ListView):
     model = Redditor
     context_object_name = 'redditors'
-    template_name = 'trades/home.html'
+    template_name = 'trades/users.html'
     paginate_by = 20
     ordering = ['username']
 
@@ -40,11 +41,15 @@ def trades(req, username):
         sort_order = req.GET['sort-date']
         trades = trades.order_by(f'{"-" if sort_order == "desc" else ""}confirmation_datetime')
 
-    return render(req, 'trades/trades.html', { 'redditor': redditor, 'trades': trades })
+    return render(req, 'trades/user-trades.html', { 'redditor': redditor, 'trades': trades })
 
 
 def update(req):
-    return render(req, 'trades/update.html')
+    if req.method == 'POST':
+        form = UpdateTradesForm(req.POST)
+        if form.is_valid():
+            return redirect('home')
+    else:
+        form = UpdateTradesForm()
 
-
-    
+    return render(req, 'trades/update.html', { 'form': form })
