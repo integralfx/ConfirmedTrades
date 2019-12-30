@@ -42,3 +42,9 @@ def trades(req, username):
 
     return render(req, 'trades/trades.html', { 'redditor': redditor, 'trades': trades })
 
+
+def update(req):
+    return render(req, 'trades/update.html')
+
+
+    

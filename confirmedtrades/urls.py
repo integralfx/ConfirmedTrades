@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.RedditorListView.as_view(), name='home'),
     path('search', views.RedditorListView.as_view(), name='search'),
     path('trades/<username>/', views.trades, name='trades'),
+    path('trades/update', views.update, name='update'),
     path('admin/', admin.site.urls),
 ]

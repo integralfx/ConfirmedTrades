@@ -13,6 +13,15 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'home' %}">Confirmed Trades</a>
+
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'update' %}">Update</a>
+                        </li>
+                    </ul>
+                </div>
+
                 <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="get">
                     <input class="form-control" name="q" type="text" placeholder="Search user" 
                            value="{% if 'q' in request.GET %}{{ request.GET.q }}{% endif %}">
@@ -20,7 +29,7 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container mt-4">
             {% block content %}{% endblock %}
         </div>
     </body>
