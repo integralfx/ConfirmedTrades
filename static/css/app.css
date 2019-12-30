@@ -1,24 +1,4 @@
-.navbar-brand {
-    font-family: 'Peralta', cursive;
-}
-
-body {
-    background-image: url(../img/connectwork.png);
-}
-
-.dropdown-item:focus, .dropdown-item:hover {
-    background-color: rgba(0, 0, 0, 0.25);
-}
-
-.dropdown-divider {
-    border-top: 1px solid #777777;
-}
-
-.breadcrumb-item.active {
-    color: white;
-}
-
-div.editor-toolbar {
-    background: white;
-    opacity: 1.0;
+a.nav-link > img {
+    width: 20px;
+    height: 20px;
 }

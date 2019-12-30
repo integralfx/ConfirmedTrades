@@ -6,6 +6,7 @@
         <title>{% block title %}Confirmed Trades{% endblock %}</title>
         <link href="https://fonts.googleapis.com/css?family=Peralta" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/app.css' %}">
         {% block stylesheet %}
         {% endblock %}
     </head>
@@ -19,7 +20,8 @@
                         {% url 'trades-users' as trades_users_url %}
                         <li class="nav-item {% if request.path == trades_users_url %}active{% endif %}">
                             <a class="nav-link" href="{{ trades_users_url }}">
-                                <img src="{% static 'img/team-white.png' %}" width='20px' height='20px'>
+                                <img src="{% static 'img/team-white.png' %}"
+                                     style="opacity:{% if request.path == trades_users_url %}1.0{% else %}0.5{% endif %}">
                                 Users
                             </a>
                         </li>
@@ -27,7 +29,8 @@
                         {% url 'update' as update_url %}
                         <li class="nav-item {% if request.path == update_url %}active{% endif %}">
                             <a class="nav-link" href="{{ update_url }}">
-                                <img src="{% static 'img/update-white.png' %}" width='20px' height='20px'>
+                                <img src="{% static 'img/update-white.png' %}"
+                                     style="opacity:{% if request.path == update_url %}1.0{% else %}0.5{% endif %}">
                                 Update
                             </a>
                         </li>
