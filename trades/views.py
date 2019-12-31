@@ -57,7 +57,7 @@ class RedditorListView(ListView):
 
 def user_trades(req, username):
     redditor = get_object_or_404(Redditor, username=username)
-    trades = Trade.objects.filter(user1=redditor)
+    trades = Trade.objects.filter(user1=redditor).order_by("user2__username")
 
     if 'sort-user' in req.GET:
         sort_order = req.GET['sort-user']
