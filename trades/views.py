@@ -12,6 +12,23 @@ class TradeListView(ListView):
     paginate_by = 20
     ordering = ['user1']
 
+    def get_queryset(self):
+        qs = Trade.objects.all()
+
+        if 'sort-user1' in self.request.GET:
+            sort_order = self.request.GET['sort-user1']
+            qs = qs.order_by(f'{"-" if sort_order == "desc" else ""}user1__username')
+        elif 'sort-user2' in self.request.GET:
+            sort_order = self.request.GET['sort-user2']
+            qs = qs.order_by(f'{"-" if sort_order == "desc" else ""}user2__username')
+        elif 'sort-confirmation' in self.request.GET:
+            sort_order = self.request.GET['sort-confirmation']
+            qs = qs.order_by(f'{"-" if sort_order == "desc" else ""}comment_id')
+        elif 'sort-date' in self.request.GET:
+            sort_order = self.request.GET['sort-date']
+            qs = qs.order_by(f'{"-" if sort_order == "desc" else ""}confirmation_datetime')
+
+        return qs
 
 class RedditorListView(ListView):
     model = Redditor
