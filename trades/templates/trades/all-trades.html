@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th style="width: 25%">User 1</th>
+                <th style="width: 25%">User 2</th>
+                <th style="width: 10%">Comment</th>
+                <th style="width: 40%">Confirmed Date Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trade in trades %}
+                <tr>
+                    <td><a href="{% url 'user-trades' trade.user1.username %}">{{ trade.user1.username }}</a></td>
+                    <td><a href="{% url 'user-trades' trade.user2.username %}">{{ trade.user2.username }}</a></td>
+                    <td><a href="{{ trade.comment_url }}">{{ trade.comment_id }}</a></td>
+                    <td>{{ trade.confirmation_datetime }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'includes/pagination.html' %}
+{% endblock %}

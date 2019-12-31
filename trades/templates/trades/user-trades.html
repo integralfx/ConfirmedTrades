@@ -42,7 +42,7 @@
         <tbody>
             {% for trade in trades %}
                 <tr>
-                    <td><a href="{% url 'trades' trade.user2 %}">{{ trade.user2 }}</a></td>
+                    <td><a href="{% url 'user-trades' trade.user2 %}">{{ trade.user2 }}</a></td>
                     <td><a href="{{ trade.comment_url }}">{{ trade.comment_id }}</a></td>
                     <td>{{ trade.confirmation_datetime }}</td>
                 </tr>

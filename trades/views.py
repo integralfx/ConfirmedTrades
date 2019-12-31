@@ -5,6 +5,14 @@ from django.db.models import Count
 from .forms import UpdateTradesForm
 from .models import Redditor, Trade
 
+class TradeListView(ListView):
+    model = Trade
+    context_object_name = 'trades'
+    template_name = 'trades/all-trades.html'
+    paginate_by = 20
+    ordering = ['user1']
+
+
 class RedditorListView(ListView):
     model = Redditor
     context_object_name = 'redditors'
@@ -30,7 +38,7 @@ class RedditorListView(ListView):
         return qs
 
 
-def trades(req, username):
+def user_trades(req, username):
     redditor = get_object_or_404(Redditor, username=username)
     trades = Trade.objects.filter(user1=redditor)
 
