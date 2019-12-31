@@ -62,6 +62,9 @@ def user_trades(req, username):
     if 'sort-user' in req.GET:
         sort_order = req.GET['sort-user']
         trades = trades.order_by(f'{"-" if sort_order == "desc" else ""}user2__username')
+    elif 'sort-confirmation' in req.GET:
+        sort_order = req.GET['sort-confirmation']
+        trades = trades.order_by(f'{"-" if sort_order == "desc" else ""}comment_id')
     elif 'sort-date' in req.GET:
         sort_order = req.GET['sort-date']
         trades = trades.order_by(f'{"-" if sort_order == "desc" else ""}confirmation_datetime')

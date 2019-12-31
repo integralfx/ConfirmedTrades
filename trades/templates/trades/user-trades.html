@@ -29,7 +29,13 @@
                         {% include 'includes/sort_icon.html' %}
                     </a>
                 </th>
-                <th style="width: 30%">Confirmation</th>
+                <th style="width: 30%">
+                    <a href="?{% sort_query request 'sort-confirmation' %}">
+                        Confirmation
+                        {% get_param request 'sort-confirmation' as sort_param %}
+                        {% include 'includes/sort_icon.html' %}
+                    </a>
+                </th>
                 <th style="width: 40%">
                     <a href="?{% sort_query request 'sort-date' %}">
                         Confirmation Date & Time
