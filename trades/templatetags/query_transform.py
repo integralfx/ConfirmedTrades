@@ -17,7 +17,11 @@ def sort_query(request, param, delete_others=True):
     params = request.GET.copy()
 
     if param in params:
-        params[param] = 'asc' if params[param] == 'desc' else 'desc'
+        # Cycle through asc, desc then no sorting
+        if params[param] == 'desc':
+            params = { k: v for k, v in params.items() if k != param }
+        else:
+            params[param] = 'desc'
     else:
         # Initially, the home page is already sorted by the user but doesn't have the 'sort-user=asc' query. Clicking on
         # it in this case, should sort the users in descending order.
