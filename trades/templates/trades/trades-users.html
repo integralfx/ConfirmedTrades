@@ -8,17 +8,24 @@
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th style="width: 80%">
+                <th style="width: 60%">
                     <a href="?{% sort_query request 'sort-user' %}">
                         User
                         {% get_param request 'sort-user' as sort_param %}
                         {% include 'includes/sort_icon.html' %}
                     </a>
                 </th>
-                <th style="width: 20%">
+                <th style="width: 10%">
                     <a href="?{% sort_query request 'sort-trades' %}">
                         Trades
                         {% get_param request 'sort-trades' as sort_param %}
+                        {% include 'includes/sort_icon.html' %}
+                    </a>
+                </th>
+                <th style="width: 30%">
+                    <a href="?{% sort_query request 'sort-last' %}">
+                        Last Confirmation
+                        {% get_param request 'sort-last' as sort_param %}
                         {% include 'includes/sort_icon.html' %}
                     </a>
                 </th>
@@ -32,6 +39,9 @@
                     </td>
                     <td>
                         {{ redditor.trades1.count }}
+                    </td>
+                    <td>
+                        {{ redditor.last_confirmation_date }}
                     </td>
                 </tr>
             {% endfor %}

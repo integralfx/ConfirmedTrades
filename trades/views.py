@@ -1,6 +1,6 @@
 from django.views.generic import ListView
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Count
+from django.db.models import Count, Max, Q, F
 
 from .forms import UpdateTradesForm
 from .models import Redditor, Trade
@@ -38,7 +38,7 @@ class RedditorListView(ListView):
     ordering = ['username']
 
     def get_queryset(self):
-        qs = Redditor.objects.all()
+        qs = Redditor.objects.all().annotate(last_confirmation_date=Max('trades1__confirmation_datetime'))
 
         if 'q' in self.request.GET:
             q = self.request.GET['q']
@@ -51,6 +51,9 @@ class RedditorListView(ListView):
             sort_order = self.request.GET['sort-trades']
             qs = (qs.annotate(num_trades=Count('trades1'))
                     .order_by(f'{"-" if sort_order == "desc" else ""}num_trades'))
+        elif 'sort-last' in self.request.GET:
+            sort_order = self.request.GET['sort-last']
+            qs = qs.order_by(f'{"-" if sort_order == "desc" else ""}last_confirmation_date')
 
         return qs
 
