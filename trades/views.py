@@ -33,7 +33,7 @@ class TradeListView(ListView):
 class RedditorListView(ListView):
     model = Redditor
     context_object_name = 'redditors'
-    template_name = 'trades/users.html'
+    template_name = 'trades/trades-users.html'
     paginate_by = 20
     ordering = ['username']
 
