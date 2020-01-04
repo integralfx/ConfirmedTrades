@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'trades',
+
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

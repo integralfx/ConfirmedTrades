@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load query_transform %}
+
+{% load static %}
+
+{% block content %}
+    <h2>Trades for {{ redditor }}</h2>
+    
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Info</h5>
+            <div class="card-text">
+                <ul>
+                    <li><a href="https://reddit.com/user/{{ redditor }}">Reddit Profile</a></li>
+                    <li>{{ trades.count }} trade{{ trades.count|pluralize }} confirmed</li>
+                <ul>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th style="width: 30%">
+                    <a href="?{% sort_query request 'sort-user' %}">
+                        User
+                        {% get_param request 'sort-user' as sort_param %}
+                        {% include 'includes/sort_icon.html' %}
+                    </a>
+                </th>
+                <th style="width: 30%">
+                    <a href="?{% sort_query request 'sort-confirmation' %}">
+                        Confirmation
+                        {% get_param request 'sort-confirmation' as sort_param %}
+                        {% include 'includes/sort_icon.html' %}
+                    </a>
+                </th>
+                <th style="width: 40%">
+                    <a href="?{% sort_query request 'sort-date' %}">
+                        Confirmation Date & Time
+                        {% get_param request 'sort-date' as sort_param %}
+                        {% include 'includes/sort_icon.html' %}
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trade in trades %}
+                <tr>
+                    <td><a href="{% url 'user-trades' trade.user2 %}">{{ trade.user2 }}</a></td>
+                    <td><a href="{{ trade.comment_url }}">{{ trade.comment_id }}</a></td>
+                    <td>{{ trade.confirmation_datetime }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

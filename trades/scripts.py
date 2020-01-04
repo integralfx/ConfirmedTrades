@@ -4,6 +4,8 @@ import os.path
 from tqdm import tqdm
 from trades.ConfirmedTrades import ConfirmedTrades
 from trades.reddit import reddit
+from datetime import datetime
+import pytz
 
 def import_trades():
     files = listdir('trades/comment_urls')
@@ -119,3 +121,30 @@ def import_confirmed_trades():
                 pbar.update()
 
 
+def update_confirmed_trades(url):
+    trades = ct.get_trades_from_url(url)
+    count = 0
+
+    for comment_id in tqdm(trades, desc='Adding trades', unit='trades'):
+        curr = trades[comment_id]
+        user1, _ = Redditor.objects.get_or_create(username=curr['user1'])
+        user2, _ = Redditor.objects.get_or_create(username=curr['user2'])
+        if not Trade.objects.filter(comment_id=comment_id).exists():
+            Trade.objects.create(user1=user1, user2=user2, comment_id=comment_id, comment_url=curr['url'])
+            count += 1
+
+    if count > 0:
+        print(f'Added {count} new trades')
+    else:
+        print('No new trades added')
+
+
+def update_trade_dates(index, count):
+    trades = Trade.objects.all()[index:index+count]
+    epoch = datetime(1970, 1, 1, 0, 0, tzinfo=pytz.UTC)
+    for trade in tqdm(trades, desc='Updating trade dates', unit='trades'):
+        if trade.confirmation_datetime == epoch:
+            comment = reddit.comment(id=trade.comment_id)
+            dt = datetime.fromtimestamp(comment.created_utc, tz=pytz.UTC)
+            trade.confirmation_datetime = dt
+            trade.save()

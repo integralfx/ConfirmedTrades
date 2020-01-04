@@ -9,54 +9,71 @@ class ConfirmedTrades:
         self.trades = {}
         self.urls = []
 
-    # returns {<username>:[<comment_ids>]} where:
-    #   username is the Reddit username
-    #   comment_ids are a list of the parent_ids of a confirmed trade
+
+    # Checks if mentioned_user replied 'confirmed' and returns the parent comment id.
+    # TODO: Account for confirmations of other users. e.g. A traded with B, B confirmed, B traded with C, C confirmed.
+    def get_mentioned_user_confirmed_comment(self, parent_comment, comment, mentioned_user):
+        if comment.author is None:
+            return None
+
+        if mentioned_user:
+            user = comment.author.name.lower()
+            if user == mentioned_user and 'confirmed' in comment.body.lower():
+                return (parent_comment, comment.created_utc)
+
+        match = re.search('u/[A-Za-z0-9_-]+', comment.body)
+        if match:
+            mentioned_user = match.group().lower()[2:]
+
+        for reply in comment.replies:
+            confirmed = self.get_mentioned_user_confirmed_comment(comment, reply, mentioned_user)
+            if confirmed:
+                return confirmed
+
+        return None
+
+
+    # returns { comment_id: { user1, user2, url } } where:
+    #   user1 and user2 are the usernames of the Redditors trading
+    #   url is the permalink to the comment_id
+    # Assumes that each trade is in a different top level comment.
     def get_trades_from_url(self, url):
         submission = self.reddit.submission(url=url)
         submission.comment_sort = 'new'
         submission.comments.replace_more(limit=None)
         confirmed_trades = {}
 
-        for top_level_comment in submission.comments:
-            if top_level_comment.author is None:
+        def add_confirmed_trade(user1, user2, comment, date):
+            confirmed_trades[comment.id] = {
+                'user1': user1,
+                'user2': user2,
+                'url': f'https://reddit.com{comment.permalink}',
+                'date': date
+            }
+
+
+        for comment in submission.comments:
+            if comment.author is None:
                 continue
 
             # usernames are not case sensitive
-            top_level_user = top_level_comment.author.name.lower()
+            top_level_user = comment.author.name.lower()
 
             # find the mentioned user
-            match = re.search('u/\w+', top_level_comment.body)
+            match = re.search('u/[A-Za-z0-9_-]+', comment.body)
             if match is None:
                 continue
             mentioned_user = match.group().lower()[2:]
 
-            for second_level_comment in top_level_comment.replies:
-                if second_level_comment.author is None:
-                    continue
-
-                second_level_user = second_level_comment.author.name.lower()
-
-                if second_level_user != mentioned_user:
-                    pbar.update()
-                    continue
-
-                if 'confirmed' in second_level_comment.body.lower():
-                    if top_level_user not in confirmed_trades:
-                        confirmed_trades[top_level_user] = [top_level_comment.id]
-                    else:
-                        if top_level_comment.id not in confirmed_trades[top_level_user]:
-                            confirmed_trades[top_level_user].append(top_level_comment.id)
-
-                    if second_level_user not in confirmed_trades:
-                        confirmed_trades[second_level_user] = [top_level_comment.id]
-                    else:
-                        if top_level_comment.id not in confirmed_trades[second_level_user]:
-                            confirmed_trades[second_level_user].append(top_level_comment.id)
-
-                    break
+            for reply in comment.replies:
+                confirmed = self.get_mentioned_user_confirmed_comment(comment, reply, mentioned_user)
+                if confirmed:
+                    (c, d) = confirmed
+                    add_confirmed_trade(top_level_user, mentioned_user, c, d)
 
         return confirmed_trades
+        
+
 
     # returns a list of the urls of the monthly confirmed trade threads
     def get_submission_urls(self):
