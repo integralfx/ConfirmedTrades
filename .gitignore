@@ -105,5 +105,6 @@ ENV/
 
 url_*.txt
 confirmed_trades/
+confirmed_trades.txt
 confirmed_trades_urls.txt
 praw.txt
